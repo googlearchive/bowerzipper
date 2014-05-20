@@ -1,5 +1,5 @@
 FROM google/runtime-nodejs
-FROM hootener/node_express_bower
+#FROM hootener/node_express_bower
 
 # Install grunt
 RUN npm install -g grunt-cli
@@ -13,6 +13,6 @@ ADD package.json /app/
 RUN npm install
 ADD . /app/
 
-EXPOSE 3003
+EXPOSE 80
 CMD ["node", "/app/bowarchiver.js"]
 

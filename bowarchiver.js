@@ -1,6 +1,6 @@
 // should be configurable
 
-var port = 3003;
+var port = 80;
 
 // dependencies
 
