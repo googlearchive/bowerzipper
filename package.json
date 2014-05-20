@@ -1,16 +1,19 @@
 {
-    "name": "bowerzipper",
-    "private": true,
-    "version": "0.0.1",
-    "description": "A .zip archiving tool for Bower",
-    "dependencies": {
-        "express": "4.0.0",
-        "archiver": "0.8.1",
-        "body-parser": "1.0.2",
-        "temp": "0.7.0"
-    },
-    "main": "bowerzipper.js",
-    "repository": "",
-    "author": "",
-    "license": ""
+  "name": "bowerzipper",
+  "private": true,
+  "version": "0.0.1",
+  "description": "A node-based tool that creates a .zip from a Bower command",
+  "dependencies": {
+    "express": "4.0.0",
+    "archiver": "0.8.1",
+    "body-parser": "1.0.2",
+    "temp": "0.7.0"
+  },
+  devDependencies": {
+    "bower": "~1.3.3"
+  }
+  "main": "bowerzipper.js",
+  "repository": "",
+  "author": "Eric Bidelman <ebidel@>, Johan Euphrosine <proppy@>",
+  "license": "http://polymer.github.io/LICENSE.txt"
 }
