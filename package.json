@@ -1,0 +1,16 @@
+{
+    "name": "bowerzipper",
+    "private": true,
+    "version": "0.0.1",
+    "description": "A .zip archiving tool for Bower",
+    "dependencies": {
+        "express": "4.0.0",
+        "archiver": "0.8.1",
+        "body-parser": "1.0.2",
+        "temp": "0.7.0"
+    },
+    "main": "app.js",
+    "repository": "",
+    "author": "",
+    "license": ""
+}
