@@ -14,5 +14,5 @@ RUN npm install
 ADD . /app/
 
 EXPOSE 80
-CMD ["node", "/app/bowarchiver.js"]
+CMD ["node", "/app/bowerzipper.js"]
 
