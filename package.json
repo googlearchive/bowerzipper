@@ -9,7 +9,7 @@
     "body-parser": "1.0.2",
     "temp": "0.7.0"
   },
-  devDependencies": {
+  "devDependencies": {
     "bower": "~1.3.3"
   },
   "main": "bowerzipper.js",
