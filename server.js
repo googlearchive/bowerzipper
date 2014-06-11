@@ -64,7 +64,7 @@ function bowerInstall(name, pkg, callback) {
   if (!name || !pkg) {
     return;
   }
-  var cmd = './node_modules/bower/bin/bower --allow-root install ' + name + '=' + pkg + '#master';
+  var cmd = 'bower --allow-root install ' + name + '=' + pkg + '#master';
   clog('\x1b[37;47m ' + cmd + ' ');
   clog('\x1b[34;47m ' + cmd + ' ');
   clog('\x1b[37;47m ' + cmd + ' ');
@@ -108,6 +108,7 @@ function archive(res, componentPath, callback) {
 }
 
 // GET /archive?name=pkg ==> install component, get zip
+// Example: /archive?core-ajax=Polymer/core=ajax
 app.get('/archive', function (req, res) {
   var name, pkg;
   for (var n in req.query) {
