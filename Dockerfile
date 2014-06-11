@@ -1,2 +1,2 @@
-# https://index.docker.io/u/google/runtime-nodejs/
-FROM google/runtime-nodejs
+# https://registry.hub.docker.com/u/google/nodejs-runtime/
+FROM google/nodejs-runtime
