@@ -31,15 +31,15 @@ Next, we need to update the image from the code here on Github.
 ### Try it!
 
 The IP of the machine is `23.236.53.27`. You should be able to hit the endpoint
-and download stuff
+and download stuff.
 
-Single component takes the form `<name>=<org>/<name>`:
+- Single component takes the form `<name>=<org>/<name>`:
 
-[http://23.236.53.27/archive?core-ajax=Polymer/core-ajax](http://23.236.53.27/archive?core-ajax=Polymer/core-ajax)
+    [http://23.236.53.27/archive?core-ajax=Polymer/core-ajax](http://23.236.53.27/archive?core-ajax=Polymer/core-ajax)
 
-Multiple components are separated by `&`:
+- Multiple components are separated by `&`:
 
-[http://23.236.53.27/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field](http://23.236.53.27/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field)
+    [http://23.236.53.27/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field](http://23.236.53.27/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field)
 
 ## Run locally using Node
 
