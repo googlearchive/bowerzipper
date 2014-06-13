@@ -58,13 +58,22 @@ function asyncIterator(array, task, next) {
   });
 }
 
-function bowerInstall(name, pkg, callback) {
+function bowerInstall(pkgs, callback) {
   var componentPath = temp.mkdirSync('bower-install');
 
-  if (!name || !pkg) {
+  if (!Object.keys(pkgs).length) {
     return;
   }
-  var cmd = 'bower --allow-root install ' + name + '=' + pkg + '#master';
+
+  var intallList = '';
+  for (var name in pkgs) {
+    intallList += ' ' + name + '=' + pkgs[name] + '#master';
+  }
+
+  var cmd = 'bower --allow-root install' + intallList;// + name + '=' + pkg + '#master';
+
+console.log(cmd);
+
   clog('\x1b[37;47m ' + cmd + ' ');
   clog('\x1b[34;47m ' + cmd + ' ');
   clog('\x1b[37;47m ' + cmd + ' ');
@@ -108,18 +117,19 @@ function archive(res, componentPath, callback) {
 }
 
 // GET /archive?name=pkg ==> install component, get zip
-// Example: /archive?core-ajax=Polymer/core=ajax
+// Example: /archive?core-ajax=Polymer/core-ajax
+//          /archive?core-ajax=Polymer/core-ajax&core-tooltip=Polymer/core-tooltip
 app.get('/archive', function (req, res) {
-  var name, pkg;
+  var pkgs = {};
   for (var n in req.query) {
-    name = n;
-    pkg = req.query[n];
-    break;
+    pkgs[n] = req.query[n];
   }
-  if (!name || !pkg) {
+
+  if (!Object.keys(pkgs).length) {
     return;
   }
-  bowerInstall(name, pkg, function(err, stdout, stderr, componentPath) {
+
+  bowerInstall(pkgs, function(err, stdout, stderr, componentPath) {
     archive(res, componentPath, function(err) {
       if (err) {
         res.send(err);
