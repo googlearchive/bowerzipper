@@ -30,7 +30,7 @@ ssh into the docker VM and allow listening on 8080:
 
     boot2docker ssh -L 8080:localhost:8080
 
-### Build the image
+### Get the app code and build the image
 
     git clone https://github.com/PolymerLabs/bowerzipper
     sudo docker build -t bowerzipper bowerzipper/
