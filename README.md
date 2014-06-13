@@ -24,13 +24,22 @@ Next, we need to update the image from the code here on Github.
     cd bowerzipper
     git pull origin master
     sudo docker build -t bowerzipper .
-    sudo docker run -p 80:8080 bowerzipper
+    sudo docker run -d -p 80:8080 bowerzipper
 
 **Note** the 80 instead of 8080:8080 (used below).
 
 ### Try it!
 
-The IP of the machine is `23.236.53.27`. You should be able to hit [http://23.236.53.27/archive?core-ajax=Polymer/core-ajax](http://23.236.53.27/archive?core-ajax=Polymer/core-ajax)
+The IP of the machine is `23.236.53.27`. You should be able to hit the endpoint
+and download stuff
+
+Single component takes the form `<name>=<org>/<name>`:
+
+[http://23.236.53.27/archive?core-ajax=Polymer/core-ajax](http://23.236.53.27/archive?core-ajax=Polymer/core-ajax)
+
+Multiple components are separated by `&`:
+
+[http://23.236.53.27/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field](http://23.236.53.27/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field)
 
 ## Run locally using Node
 
@@ -63,7 +72,7 @@ ssh into the docker VM and allow listening on 8080:
 
     git clone https://github.com/PolymerLabs/bowerzipper
     sudo docker build -t bowerzipper bowerzipper/
-    sudo docker run -p 8080:8080 bowerzipper
+    sudo docker run -d -p 8080:8080 bowerzipper
 
 ### Try it!
 
