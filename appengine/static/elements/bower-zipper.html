@@ -1,0 +1,124 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="roboto2.html">
+
+<polymer-element name="bower-zipper" attributes="sources">
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        font-family: inherit;
+      }
+      ul {
+        padding: 0;
+      }
+      li {
+        list-style: none;
+        padding: 15px 0;
+        display: inline-block;
+        min-width: 175px;
+      }
+      #all {
+        margin-bottom: 10px;
+      }
+      #all::shadow #checkboxLabel {
+        font-weight: 500;
+      }
+      paper-checkbox::shadow #checkbox.checked {
+        border-color: #4285f4;
+      }
+      paper-checkbox::shadow #ink[checked] {
+        color: #4285f4;
+      }
+      paper-button[raisedButton] {
+        color: white;
+        background: #4285f4;
+        line-height: 1.5;
+      }
+    </style>
+
+    <core-ajax id="archiver" url="http://23.236.53.27/archive?{{installCmd}}"
+               response="{{zip}}" handleAs="blob"></core-ajax>
+
+    <paper-checkbox id="all" label="Toggle all" checked="{{all}}"></paper-checkbox><br>
+    <ul>
+      <template repeat="{{s,i in sourceList}}">
+        <li><paper-checkbox label="{{s.name}}" checked="{{s.checked}}"></paper-checkbox></li>
+      </template>
+    </ul>
+    <paper-button id="downloadbutton" label="{{downloadLabel}}" raisedButton on-tap="{{download}}" disabled?="{{disableDownload}}"></paper-button>
+  </template>
+  <script>
+  (function() {
+    function invokeDownload_(fileName, blob) {
+      var a = document.createElement('a');
+      a.download = fileName;
+      a.href = window.URL.createObjectURL(blob);
+      a.click();
+      window.URL.revokeObjectURL(a.href);
+    }
+
+    function constructInstallCmd_(name, org) {
+      return name + '=' + org + '/' + name;
+    }
+
+    Polymer('bower-zipper', {
+      sources: [],
+      all: false,
+      org: 'Polymer',
+      disableDownload: false,
+      downloadLabel: 'Download',
+      sourcesChanged: function() {
+        this.sourceList = Object.keys(this.sources).map(function(el, i) {
+          return {name: el, checked: false}
+        });
+      },
+      allChanged: function() {
+        this.sourceList.forEach(function(s, i) {
+          s.checked = this.all; 
+        }.bind(this));
+      },
+      download: function(e, detail, sender) {
+        if (this.disableDownload) {
+          return;
+        }
+
+        this.disableDownload = true;
+        this.downloadLabel = 'Downloading...';
+
+        var installList = this.sourceList.filter(function(s, i) {
+          return s.checked;
+        });
+
+        this.installCmd = '';
+        if (this.all) {
+          // Shortcut all elements.
+          this.installCmd = constructInstallCmd_('core-elements', this.org);
+        } else {
+          var pkgs = [];
+
+          installList.forEach(function(s, i) {
+            pkgs.push(constructInstallCmd_(s.name, this.org));
+          }.bind(this));
+
+          this.installCmd = pkgs.join('&');
+        }
+
+        if (this.installCmd) {
+          this.$.archiver.go();
+        }
+      },
+      zipChanged: function() {
+        invokeDownload_('components.zip', this.zip);
+        this.disableDownload = false;
+        this.downloadLabel = 'Download';
+      }
+    });
+
+  })();
+  </script>
+</polymer-element>

@@ -1,0 +1,72 @@
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+
+Author: Eric Bidelman - e.bidelman@google.com
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Polymer Bower .zip archiver</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+<script src="bower_components/platform/platform.js"></script>
+<link rel="import" href="elements/imports.html">
+<style shim-shadowdom>
+body {
+  font-family: 'Roboto2', sans-serif;
+  font-weight: 300;
+  margin: 50px;
+}
+h1, h2 {
+  font-weight: 300;
+}
+h1 {
+  font-weight: 300;
+  margin-right: 25px;
+}
+h2 {
+  color: #ccc;
+}
+section {
+  margin: 50px 100px;
+}
+</style>
+</head>
+<body unresolved>
+  
+<template id="t" is="auto-binding">
+
+<header layout horizontal center center-justified>
+  <h1>Download Polymer elements</h1>
+  <!-- <h2>({{latestPolymerVersion}})</h2> -->
+</header>
+
+<section>
+ <!--  <core-ajax url="https://api.github.com/repos/Polymer/polymer/tags" auto
+             handleAs="json" on-core-response="{{polymerTags}}"></core-ajax> -->
+  <core-ajax url="bower_components/core-elements/bower.json" auto
+            response="{{elements}}"></core-ajax>
+  <bower-zipper sources="{{elements.dependencies}}"></bower-zipper>
+</section>
+</template>
+
+<script>
+// TODO(ericbidelman): add GA
+
+var t = document.querySelector('#t');
+t.polymerTags = function(e) {
+  this.polymerVersions = e.target.response.filter(function(v, i) {
+    return v.name[0] != 'v'; // Throw out old version names.
+  }).map(function(v, i) {
+    return v.name;
+  });
+  this.latestPolymerVersion = this.polymerVersions[0];
+};
+</script>
+</body>
+</html>

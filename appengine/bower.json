@@ -1,0 +1,28 @@
+{
+  "name": "bowerarchiver",
+  "version": "0.0.1",
+  "homepage": "bowerarchiver.appspot.com",
+  "authors": [
+    "Eric Bidelman <ebidel@gmail.com>"
+  ],
+  "description": "Polymer Bower .zip archive tool",
+  "keywords": [
+    "bower",
+    "polymer",
+    "web-components"
+  ],
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#master",
+    "core-elements": "Polymer/core-elements#master",
+    "paper-elements": "Polymer/paper-elements#master"
+  }
+}
