@@ -70,10 +70,7 @@ function bowerInstall(pkgs, callback) {
     intallList += ' ' + name + '=' + pkgs[name] + '#master';
   }
 
-  var cmd = 'bower --allow-root install' + intallList;// + name + '=' + pkg + '#master';
-
-console.log(cmd);
-
+  var cmd = 'bower --allow-root install' + intallList + ' --force-latest';
   clog('\x1b[37;47m ' + cmd + ' ');
   clog('\x1b[34;47m ' + cmd + ' ');
   clog('\x1b[37;47m ' + cmd + ' ');
@@ -126,6 +123,11 @@ app.get('/archive', function (req, res) {
   }
 
   if (!Object.keys(pkgs).length) {
+    res.write(
+      'Examples:\n' +
+      '/archive?core-ajax=Polymer/core-ajax\n' + 
+      '/archive?core-ajax=Polymer/core-ajax&google-sheets=GoogleWebComponents/google-sheets');
+    res.end();
     return;
   }
 
@@ -151,6 +153,6 @@ function clog() {
 }
 
 // tell user what is happening
-clog('\n=========== Bowager ===========\n');
+clog('\n=========== Bowerzipper ===========\n');
 clog('Listening on port: \x1b[34;47m ' + port);
 clog();
