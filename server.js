@@ -1,23 +1,25 @@
-// should be configurable
-
-var port = 8080;
-
-// dependencies
-
 var express = require('express');
 var child_process = require('child_process');
 var archiver = require('archiver');
 var bodyParser = require('body-parser');
 var temp = require('temp');
+var Insight = require('insight');
+var PKG = require('./package.json');
 
+// Insight metrics tool. Logging to Google Analytics.
+var insight = new Insight({
+  trackingProvider: 'google',
+  trackingCode: 'UA-39334307-7',
+  packageName: PKG.name,
+  packageVersion: PKG.version
+});
 
-// bootstrap express app
+var PORT = 8080;
+
 var app = express();
+app.listen(PORT);
 app.use(bodyParser());
-
-// CORS middleware
-
-app.use(function(req, res, next) {
+app.use(function(req, res, next) { // Enable CORS non the endpoints.
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
@@ -131,6 +133,8 @@ app.get('/archive', function (req, res) {
     return;
   }
 
+  insight.track('archive', req.headers.referer); // record `/archive` in Analytics.
+
   bowerInstall(pkgs, function(err, stdout, stderr, componentPath) {
     archive(res, componentPath, function(err) {
       if (err) {
@@ -142,9 +146,6 @@ app.get('/archive', function (req, res) {
   });
 });
 
-// take requests
-app.listen(port);
-
 // colorizable logging utility
 function clog() {
   var args = Array.prototype.slice.call(arguments);
@@ -154,5 +155,5 @@ function clog() {
 
 // tell user what is happening
 clog('\n=========== Bowerzipper ===========\n');
-clog('Listening on port: \x1b[34;47m ' + port);
+clog('Listening on port: \x1b[34;47m ' + PORT);
 clog();
