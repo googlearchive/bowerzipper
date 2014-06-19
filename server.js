@@ -13,6 +13,7 @@ var insight = new Insight({
   packageName: PKG.name,
   packageVersion: PKG.version
 });
+insight.optOut = false;
 
 var PORT = 8080;
 
@@ -133,7 +134,8 @@ app.get('/archive', function (req, res) {
     return;
   }
 
-  insight.track('archive', req.headers.referer); // record `/archive` in Analytics.
+  var source = req.headers.referer || req.host;
+  insight.track('archive', source); // record `/archive/referrer` in Analytics.
 
   bowerInstall(pkgs, function(err, stdout, stderr, componentPath) {
     archive(res, componentPath, function(err) {
