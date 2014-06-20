@@ -12,7 +12,7 @@ Author: Eric Bidelman - e.bidelman@google.com
 <html>
 <head>
 <meta charset="utf-8">
-<title>Polymer Bower .zip archiver</title>
+<title>Download Polymer Elements</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 <script src="bower_components/platform/platform.js"></script>
 <link rel="import" href="elements/imports.html">
@@ -21,6 +21,9 @@ body {
   font-family: 'Roboto2', sans-serif;
   font-weight: 300;
   margin: 50px;
+}
+h1 {
+  margin: 0;
 }
 h1, h2 {
   font-weight: 300;
@@ -33,7 +36,7 @@ h2 {
   color: #ccc;
 }
 section {
-  margin: 50px 100px;
+  margin: 25px 100px;
 }
 </style>
 </head>
@@ -42,7 +45,7 @@ section {
 <template id="t" is="auto-binding">
 
 <header layout horizontal center center-justified>
-  <h1>Download Polymer elements</h1>
+  <h1>Download Polymer Elements</h1>
   <!-- <h2>({{latestPolymerVersion}})</h2> -->
 </header>
 
@@ -50,8 +53,11 @@ section {
  <!--  <core-ajax url="https://api.github.com/repos/Polymer/polymer/tags" auto
              handleAs="json" on-core-response="{{polymerTags}}"></core-ajax> -->
   <core-ajax url="bower_components/core-elements/bower.json" auto
-            response="{{elements}}"></core-ajax>
-  <bower-zipper sources="{{elements.dependencies}}"></bower-zipper>
+             response="{{coreElements}}"></core-ajax>
+  <core-ajax url="bower_components/paper-elements/bower.json" auto
+             response="{{paperElements}}"></core-ajax>
+  <bower-zipper coreElements="{{coreElements.dependencies}}"
+                paperElements="{{paperElements.dependencies}}"></bower-zipper>
 </section>
 </template>
 

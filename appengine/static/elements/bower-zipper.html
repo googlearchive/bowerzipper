@@ -2,12 +2,12 @@
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
-
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/core-icons/core-icons.html">
 <link rel="import" href="roboto2.html">
 
-<polymer-element name="bower-zipper" attributes="sources">
+<polymer-element name="bower-zipper" attributes="coreElements paperElements">
   <template>
-
     <style>
       :host {
         display: block;
@@ -20,12 +20,12 @@
         list-style: none;
         padding: 15px 0;
         display: inline-block;
-        min-width: 175px;
+        min-width: 215px;
       }
-      #all {
+      .all {
         margin-bottom: 10px;
       }
-      #all::shadow #checkboxLabel {
+      .all::shadow #checkboxLabel {
         font-weight: 500;
       }
       paper-checkbox::shadow #checkbox.checked {
@@ -37,20 +37,47 @@
       paper-button[raisedButton] {
         color: white;
         background: #4285f4;
-        line-height: 1.5;
+        padding: 5px;
+        fill: currentcolor;
+      }
+      paper-tabs {
+        background: #eee;
+        border-radius: 5px;
+        width: 50%;
+        text-transform: uppercase;
+      }
+      paper-tabs /deep/ #ink {
+        color: #fff;
+      }
+      paper-tabs::shadow #selectionBar {
+        background-color: #ccc;
       }
     </style>
 
     <core-ajax id="archiver" url="http://23.236.53.27/archive?{{installCmd}}"
                response="{{zip}}" handleAs="blob"></core-ajax>
 
-    <paper-checkbox id="all" label="Toggle all" checked="{{all}}"></paper-checkbox><br>
+    <div layout horizontal center center-justified>
+      <paper-tabs selected="{{selected}}">
+        <paper-tab name="core">Core elements</paper-tab>
+        <paper-tab name="paper">Paper elements</paper-tab>
+      </paper-tabs>
+    </div>
+
+    <p>
+      <paper-checkbox class="all" label="Toggle all" checked="{{allCore}}"
+                      hidden?="{{selected != 'core'}}"></paper-checkbox>
+      <paper-checkbox class="all" label="Toggle all" checked="{{allPaper}}"
+                      hidden?="{{selected != 'paper'}}"></paper-checkbox>
+    </p>
+
     <ul>
-      <template repeat="{{s,i in sourceList}}">
+      <template repeat="{{s,i in viewList}}">
         <li><paper-checkbox label="{{s.name}}" checked="{{s.checked}}"></paper-checkbox></li>
       </template>
     </ul>
-    <paper-button id="downloadbutton" label="{{downloadLabel}}" raisedButton on-tap="{{download}}" disabled?="{{disableDownload}}"></paper-button>
+    <paper-button id="downloadbutton" label="{{downloadLabel}}" icon="archive"
+                  raisedButton on-tap="{{download}}" disabled?="{{disableDownload}}"></paper-button>
   </template>
   <script>
   (function() {
@@ -67,19 +94,33 @@
     }
 
     Polymer('bower-zipper', {
-      sources: [],
-      all: false,
+      coreElements: [],
+      paperElements: [],
+      allCore: false,
+      allPaper: false,
       org: 'Polymer',
       disableDownload: false,
       downloadLabel: 'Download',
-      sourcesChanged: function() {
-        this.sourceList = Object.keys(this.sources).map(function(el, i) {
+      observe: {
+        'allCore allPaper': 'selectAllInView'
+      },
+      coreElementsChanged: function() {
+        this.coreList = Object.keys(this.coreElements).map(function(el, i) {
+          return {name: el, checked: false}
+        });
+        this.selected = 'core'; // core selected by default.
+      },
+      paperElementsChanged: function() {
+        this.paperList = Object.keys(this.paperElements).map(function(el, i) {
           return {name: el, checked: false}
         });
       },
-      allChanged: function() {
-        this.sourceList.forEach(function(s, i) {
-          s.checked = this.all; 
+      selectedChanged: function() {
+        this.viewList = this.selected == 'core' ? this.coreList : this.paperList;
+      },
+      selectAllInView: function() {
+        this.viewList.forEach(function(s, i) {
+          s.checked = this.selected == 'core' ? this.allCore : this.allPaper; 
         }.bind(this));
       },
       download: function(e, detail, sender) {
@@ -90,23 +131,38 @@
         this.disableDownload = true;
         this.downloadLabel = 'Downloading...';
 
-        var installList = this.sourceList.filter(function(s, i) {
-          return s.checked;
-        });
-
         this.installCmd = '';
-        if (this.all) {
-          // Shortcut all elements.
-          this.installCmd = constructInstallCmd_('core-elements', this.org);
-        } else {
-          var pkgs = [];
+        var installList = [];
+        var pkgs = [];
 
+        if (this.allCore) {
+          // Shortcut all core elements.
+          pkgs.push(constructInstallCmd_('core-elements', this.org));
+        } else {
+          // Create download list from selected core elements.
+          installList = this.coreList.filter(function(s, i) {
+            return s.checked;
+          });
+        }
+
+        if (this.allPaper) {
+          // Shortcut all paper elements.
+          pkgs.push(constructInstallCmd_('paper-elements', this.org));
+        } else {
+          // Create download list from selected paper elements.
+          installList = installList.concat(this.paperList.filter(function(s, i) {
+            return s.checked;
+          }));
+        }
+
+        // Individual packages.
+        if (installList.length) {
           installList.forEach(function(s, i) {
             pkgs.push(constructInstallCmd_(s.name, this.org));
           }.bind(this));
-
-          this.installCmd = pkgs.join('&');
         }
+
+        this.installCmd = pkgs.join('&');
 
         if (this.installCmd) {
           this.$.archiver.go();
