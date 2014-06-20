@@ -3,3 +3,5 @@ FROM google/nodejs-runtime
 
 # Install Bower
 RUN npm install -g bower
+
+CMD []
