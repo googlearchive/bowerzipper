@@ -9,9 +9,25 @@
 
 __author__ = 'e.bidelman@google.com (Eric Bidelman)'
 
+import logging
 import webapp2
 
 from django.template.loader import render_to_string
+from google.appengine.api import urlfetch
+
+
+class ArchiveHandler(webapp2.RequestHandler):
+
+  ARCHIVER_HOST = '23.236.53.27'
+
+  def archive(self):
+    url = 'http://%s/archive?%s' % (self.ARCHIVER_HOST, self.request.query_string)
+    result = urlfetch.fetch(url, deadline=60)
+    return result.content
+
+  def get(self):
+    self.response.headers['Content-Type'] = 'application/zip'
+    return self.response.out.write(self.archive())
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -25,9 +41,6 @@ class MainHandler(webapp2.RequestHandler):
       self.response.out.write(render_to_string(template_path, data))
     except Exception:
       handle_404(self.request, self.response, Exception)
-
-  def get(self, path):
-    return self.render(data={}, template_path=os.path.join(path + '.html'))
 
 
 def handle_401(request, response, exception):
@@ -57,5 +70,6 @@ def handle_500(request, response, exception):
 
 
 app = webapp2.WSGIApplication([
+  ('/archive', ArchiveHandler),
   ('/(.*)', MainHandler),
 ], debug=True)
