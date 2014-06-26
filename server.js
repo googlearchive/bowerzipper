@@ -6,6 +6,8 @@ var temp = require('temp');
 var Insight = require('insight');
 var PKG = require('./package.json');
 
+temp.track(); // Ensure temp directories are cleaned up.
+
 // Insight metrics tool. Logging to Google Analytics.
 var insight = new Insight({
   trackingProvider: 'google',
@@ -98,7 +100,7 @@ function archive(res, componentPath, callback) {
   
   var archive = archiver('zip');
 
-  archive.on('close', function () {
+  archive.on('end', function () {
      console.log(archive.pointer() + ' total bytes');
      console.log('archiver has been finalized and the output file descriptor has closed.');
      callback(null);
@@ -139,6 +141,9 @@ app.get('/archive', function (req, res) {
 
   bowerInstall(pkgs, function(err, stdout, stderr, componentPath) {
     archive(res, componentPath, function(err) {
+
+      temp.cleanup();
+
       if (err) {
         res.send(err);
         res.close();
