@@ -9,19 +9,21 @@
 
 __author__ = 'e.bidelman@google.com (Eric Bidelman)'
 
-import logging
 import webapp2
+import os
+import logging
 
-from django.template.loader import render_to_string
-from google.appengine.api import urlfetch
+from google.appengine.api import urlfetch, modules
 
 
 class ArchiveHandler(webapp2.RequestHandler):
 
-  ARCHIVER_HOST = '23.236.53.27'
-
   def archive(self):
-    url = 'http://%s/archive?%s' % (self.ARCHIVER_HOST, self.request.query_string)
+
+    archiver_host = modules.get_hostname(module="zipper")
+
+    url = 'http://%s/archive?%s' % (archiver_host, self.request.query_string)
+    logging.info('dispatching to archiver at: %s', url)
     result = urlfetch.fetch(url, deadline=60)
     return result.content
 
@@ -29,47 +31,6 @@ class ArchiveHandler(webapp2.RequestHandler):
     self.response.headers['Content-Type'] = 'application/zip'
     return self.response.out.write(self.archive())
 
-
-class MainHandler(webapp2.RequestHandler):
-
-  def render(self, data={}, template_path=None, status=None, message=None,
-             relpath=None):
-    if status is not None and status != 200:
-      self.response.set_status(status, message)
-
-    try:
-      self.response.out.write(render_to_string(template_path, data))
-    except Exception:
-      handle_404(self.request, self.response, Exception)
-
-
-def handle_401(request, response, exception):
-  ERROR_401 = (
-    '<title>401 Unauthorized</title>\n'
-    '<h1>Error: Unauthorized</h1>\n'
-    '<h2>User does not have permission to view this page.</h2>')
-  response.write(ERROR_401)
-  response.set_status(401)
-
-def handle_404(request, response, exception):
-  ERROR_404 = (
-    '<title>404 Not Found</title>\n'
-    '<h1>Error: Not Found</h1>\n'
-    '<h2>The requested URL <code>%s</code> was not found on this server.'
-    '</h2>' % request.url)
-  response.write(ERROR_404)
-  response.set_status(404)
-
-def handle_500(request, response, exception):
-  logging.exception(exception)
-  ERROR_500 = (
-    '<title>500 Internal Server Error</title>\n'
-    '<h1>Error: 500 Internal Server Error</h1>')
-  response.write(ERROR_500)
-  response.set_status(500)
-
-
 app = webapp2.WSGIApplication([
   ('/archive', ArchiveHandler),
-  ('/(.*)', MainHandler),
 ], debug=True)
