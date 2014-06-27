@@ -130,7 +130,7 @@ app.get('/archive', function (req, res) {
   if (!Object.keys(pkgs).length) {
     res.write(
       'Examples:\n' +
-      '/archive?core-ajax=Polymer/core-ajax\n' + 
+      '/archive?core-ajax=Polymer/core-ajax\n' +
       '/archive?core-ajax=Polymer/core-ajax&google-sheets=GoogleWebComponents/google-sheets');
     res.end();
     return;
@@ -148,9 +148,13 @@ app.get('/archive', function (req, res) {
         res.send(err);
         res.close();
         console.log(err);
-      }  
+      }
     });
   });
+});
+
+app.get('/_ah/health', function (req, res) {
+  res.send('ok');
 });
 
 // colorizable logging utility
