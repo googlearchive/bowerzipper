@@ -1,8 +1,0 @@
-version: v1beta1
-containers:
-  - name: bowerzipper-containervm
-    image:  projects/google-containers/global/images/container-vm-v20140522
-    ports:
-      - name: http
-        hostPort: 80
-        containerPort: 8080

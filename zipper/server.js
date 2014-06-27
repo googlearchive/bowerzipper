@@ -110,6 +110,7 @@ function archive(res, componentPath, callback) {
     callback(err);
   });
 
+  res.set('Content-Type', 'application/zip');
   archive.pipe(res);
   archive.bulk([
       { expand: true, cwd: componentPath, src: ['**'], dest: 'components'}
