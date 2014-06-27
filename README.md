@@ -3,7 +3,7 @@ bowerzipper
 
 Node app that generates a .zip for a particular bower install
 
-## 1. Install the on Google Cloud Engine
+## 1. Install on Google Cloud Engine
 
 1. Open the project page: [https://console.developers.google.com/project/apps~bowerarchiver/compute/instances](https://console.developers.google.com/project/apps~bowerarchiver/compute/instances) and click the SSH button.
 2. Login to the VM using the SSH command you get (e.g. `gcutil ssh bowerzipper-vm`).
