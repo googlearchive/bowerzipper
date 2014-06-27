@@ -1,3 +1,4 @@
+var path = require('path');
 var express = require('express');
 var child_process = require('child_process');
 var archiver = require('archiver');
@@ -75,7 +76,7 @@ function bowerInstall(pkgs, callback) {
     intallList += ' ' + name + '=' + pkgs[name] + '#master';
   }
 
-  var cmd = 'bower --allow-root install' + intallList + ' --force-latest';
+  var cmd = path.join(__dirname, 'node_modules/bower/bin/bower --allow-root install' + intallList + ' --force-latest');
   clog('\x1b[37;47m ' + cmd + ' ');
   clog('\x1b[34;47m ' + cmd + ' ');
   clog('\x1b[37;47m ' + cmd + ' ');
