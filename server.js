@@ -108,7 +108,6 @@ function archive(res, componentPath, callback) {
 
   archive.on('error', function(err){
     callback(err);
-      throw err;
   });
 
   archive.pipe(res);
