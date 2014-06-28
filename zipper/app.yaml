@@ -6,7 +6,9 @@ api_version: 1
 threadsafe: yes
 vm: true
 manual_scaling:
-  instances: 10
+  instances: 3
+vm_settings:
+  docker_bucket: vm-containers.bowerarchiver.appspot.com
 
 handlers:
 - url: /.*
