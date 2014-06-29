@@ -1,7 +1,7 @@
 bowerzipper
 =============
 
-Node app that generates a .zip for a particular bower install. The backend ([http://zipper.bowerarchiver.appspot.com](zipper.bowerarchiver.appspot.com)) runs on Google Compute Engine as managed VM. The frontend ([http://bowerarchiver.appspot.com](bowerarchiver.appspot.com)) runs on Google App Engine.
+Node app that generates a .zip for a particular bower install. The backend ([zipper.bowerarchiver.appspot.com](http://zipper.bowerarchiver.appspot.com/)) runs on Google Compute Engine as managed VM. The frontend ([bowerarchiver.appspot.com](http://bowerarchiver.appspot.com/)) runs on Google App Engine.
 
 ## Admin on Google Cloud Engine
 
