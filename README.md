@@ -1,45 +1,38 @@
 bowerzipper
 =============
 
-Node app that generates a .zip for a particular bower install
+Node app that generates a .zip for a particular bower install. The backend (zipper.bowerarchiver.appspot.com) runs on Google Compute Engine as managed VM. The frontend (bowerarchiver.appspot.com) runs on Google App Engine.
 
-## 1. Install on Google Cloud Engine
+## Admin on Google Cloud Engine
 
-1. Open the project page: [https://console.developers.google.com/project/apps~bowerarchiver/compute/instances](https://console.developers.google.com/project/apps~bowerarchiver/compute/instances) and click the SSH button.
-2. Login to the VM using the SSH command you get (e.g. `gcutil ssh bowerzipper-vm`).
+The cloud console page is at [https://console.developers.google.com/project/apps~bowerarchiver/compute/instances](https://console.developers.google.com/project/apps~bowerarchiver/compute/instances). From here, you can ssh into machines, manage the VMs, and project settings.
 
-3. Install the code from github
+## Updating the zipper on Google Cloud Engine
 
-      git clone https://github.com/PolymerLabs/bowerzipper
+1. Install the code from github
 
-## 2. Updating the app on Google Cloud Engine
+        git clone https://github.com/PolymerLabs/bowerzipper
 
-First, ssh into the vm and shutdown the running process
+2. Make your changes.
 
-    ps -ef | grep bowerzipper
-    # kill -9 the process id
+3. Deploy the frontend and/or backend using:
 
-Next, we need to update the image from the code here on Github.
-
-    cd bowerzipper
-    git pull origin master
-    sudo docker build -t bowerzipper .
-    sudo docker run -d -p 80:8080 bowerzipper
-
-**Note** the 80 instead of 8080:8080 (used below).
+        gcloud app deploy frontend/
+        gcloud app deploy zipper/
 
 ### Try it!
 
-The IP of the machine is `23.236.53.27`. You should be able to hit the endpoint
-and download stuff.
+The frontend allows you to download components: `bowerarchiver.appspot.com`. 
+
+You should be able to hit the endpoint and download stuff. You can also pass params directly to interact with the web service:
 
 - Single component takes the form `<name>=<org>/<name>`:
 
-    [http://23.236.53.27/archive?core-ajax=Polymer/core-ajax](http://23.236.53.27/archive?core-ajax=Polymer/core-ajax)
+    [http://bowerarchiver.appspot.com/archive?core-ajax=Polymer/core-ajax](http://bowerarchiver.appspot.com/archive?core-ajax=Polymer/core-ajax)
 
 - Multiple components are separated by `&`:
 
-    [http://23.236.53.27/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field](http://23.236.53.27/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field)
+    [http://bowerarchiver.appspot.com/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field](http://bowerarchiver.appspot.com/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field)
 
 ## Run locally using Node
 
