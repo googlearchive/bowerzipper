@@ -30,7 +30,12 @@ h1, h2 {
 }
 h1 {
   font-weight: 300;
-  margin-right: 25px;
+}
+h1 img {
+  height: 25px;
+}
+h1 span {
+  margin-left: 3px;
 }
 h2 {
   color: #ccc;
@@ -45,13 +50,13 @@ section {
 <template id="t" is="auto-binding">
 
 <header layout horizontal center center-justified>
-  <h1>Download Polymer Elements</h1>
+  <h1>Download <span ><img src="http://www.polymer-project.org/images/logos/p-logo.svg"> Polymer</span> Elements</h1>
   <!-- <h2>({{latestPolymerVersion}})</h2> -->
 </header>
 
 <section>
- <!--  <core-ajax url="https://api.github.com/repos/Polymer/polymer/tags" auto
-             handleAs="json" on-core-response="{{polymerTags}}"></core-ajax> -->
+  <core-ajax url="https://api.github.com/repos/Polymer/polymer/releases" auto
+             handleAs="json" on-core-response="{{polymerTags}}"></core-ajax>
   <core-ajax url="bower_components/core-elements/bower.json" auto
              response="{{coreElements}}"></core-ajax>
   <core-ajax url="bower_components/paper-elements/bower.json" auto
@@ -65,9 +70,9 @@ section {
 var t = document.querySelector('#t');
 t.polymerTags = function(e) {
   this.polymerVersions = e.target.response.filter(function(v, i) {
-    return v.name[0] != 'v'; // Throw out old version names.
+    return v.tag_name[0] != 'v'; // Throw out old version names.
   }).map(function(v, i) {
-    return v.name;
+    return v.tag_name;
   });
   this.latestPolymerVersion = this.polymerVersions[0];
 };
