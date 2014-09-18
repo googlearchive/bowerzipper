@@ -21,6 +21,9 @@ handlers:
   http_headers:
     Access-Control-Allow-Origin: "*"
 
+- url: /images
+  static_dir: static/images
+
 - url: /elements
   static_dir: static/elements
   http_headers:
