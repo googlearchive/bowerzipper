@@ -19,6 +19,7 @@ The cloud console page is at [https://console.developers.google.com/project/apps
 
         gcloud app deploy frontend/
         gcloud app deploy zipper/
+        # gcloud --verbosity debug preview app deploy zipper/ --server preview.appengine.google.com
 
 ### Try it!
 
