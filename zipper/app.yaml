@@ -1,6 +1,6 @@
 application: bowerarchiver
 module: zipper
-version: 20140801
+version: 20141116
 runtime: custom
 api_version: 1
 threadsafe: yes
