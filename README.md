@@ -17,8 +17,8 @@ The cloud console page is at [https://console.developers.google.com/project/apps
 
 3. Deploy the frontend and/or backend using:
 
-        gcloud app deploy frontend/
-        gcloud app deploy zipper/
+        gcloud preview app deploy frontend/ --project bowerarchiver
+        gcloud preview app deploy zipper/ --project bowerarchiver
         # gcloud --verbosity debug preview app deploy zipper/ --server preview.appengine.google.com
 
 ### Try it!
@@ -35,6 +35,10 @@ You should be able to hit the endpoint and download stuff. You can also pass par
 
     [http://bowerarchiver.appspot.com/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field](http://bowerarchiver.appspot.com/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field)
 
+- By default, the zipper tool will fetch the latest release of a component. You can specify a particular tag using: `<name>=<org>/<name>%23<VERSION>`:
+
+    [http://bowerarchiver.appspot.com/archive?core-ajax=Polymer/core-ajax%23^0.8](http://bowerarchiver.appspot.com/archive?core-ajax=Polymer/core-ajax%23^0.8-preview)
+    
 ## Run locally using Node
 
     git clone https://github.com/PolymerLabs/bowerzipper
