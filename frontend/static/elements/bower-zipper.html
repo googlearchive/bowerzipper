@@ -58,33 +58,36 @@
       }
     </style>
 
-    <core-ajax id="archiver" url="/archive?{{installCmd}}"
-               response="{{zip}}" handleAs="blob"></core-ajax>
+    <div on-change="{{onCheckToggle}}">
 
-    <div layout horizontal center center-justified>
-      <paper-tabs selected="{{selected}}">
-        <paper-tab name="core">Core elements</paper-tab>
-        <paper-tab name="paper">Paper elements</paper-tab>
-      </paper-tabs>
+      <core-ajax id="archiver" url="/archive?{{installCmd}}"
+                 response="{{zip}}" handleAs="blob"></core-ajax>
+
+      <div layout horizontal center center-justified>
+        <paper-tabs selected="{{selected}}">
+          <paper-tab name="core">Core elements</paper-tab>
+          <paper-tab name="paper">Paper elements</paper-tab>
+        </paper-tabs>
+      </div>
+
+      <p>
+        <paper-checkbox class="all" label="Toggle all" checked="{{allCore}}"
+                        hidden?="{{selected != 'core'}}"></paper-checkbox>
+        <paper-checkbox class="all" label="Toggle all" checked="{{allPaper}}"
+                        hidden?="{{selected != 'paper'}}"></paper-checkbox>
+      </p>
+
+      <ul>
+        <template repeat="{{s,i in viewList}}">
+          <li><paper-checkbox label="{{s.name}}" checked="{{s.checked}}"></paper-checkbox></li>
+        </template>
+      </ul>
+      <paper-button id="downloadbutton"
+                    raised on-tap="{{download}}"
+                    disabled?="{{disableDownload}}">
+        <core-icon icon="archive"></core-icon>{{downloadLabel}}
+      </paper-button>
     </div>
-
-    <p>
-      <paper-checkbox class="all" label="Toggle all" checked="{{allCore}}"
-                      hidden?="{{selected != 'core'}}"></paper-checkbox>
-      <paper-checkbox class="all" label="Toggle all" checked="{{allPaper}}"
-                      hidden?="{{selected != 'paper'}}"></paper-checkbox>
-    </p>
-
-    <ul on-change="{{onCheckToggle}}">
-      <template repeat="{{s,i in viewList}}">
-        <li><paper-checkbox label="{{s.name}}" checked="{{s.checked}}"></paper-checkbox></li>
-      </template>
-    </ul>
-    <paper-button id="downloadbutton"
-                  raised on-tap="{{download}}"
-                  disabled?="{{disableDownload}}">
-      <core-icon icon="archive"></core-icon>{{downloadLabel}}
-    </paper-button>
   </template>
   <script>
   (function() {
@@ -131,6 +134,11 @@
         }.bind(this));
       },
       onCheckToggle: function(e, detail, sender) {
+        if (this.allPaper || this.allCore) {
+          this.disableDownload = false;
+          return;
+        }
+
         for (var i = 0, c; c = this.coreList[i]; ++i) {
           if (c.checked) {
             this.disableDownload = false;
