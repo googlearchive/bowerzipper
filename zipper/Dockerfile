@@ -1,2 +1,2 @@
-# https://registry.hub.docker.com/u/google/nodejs-runtime/
-FROM google/nodejs-runtime
+# https://github.com/joyent/docker-node
+FROM node:onbuild

@@ -28,17 +28,15 @@
       .all::shadow #checkboxLabel {
         font-weight: 500;
       }
-      paper-checkbox::shadow #checkbox.checked {
-        border-color: #4285f4;
-      }
-      paper-checkbox::shadow #ink[checked] {
-        color: #4285f4;
-      }
-      paper-button[raisedButton] {
+      paper-button[raised] {
         color: white;
         background: #4285f4;
         padding: 5px;
         fill: currentcolor;
+      }
+      paper-button[raised][disabled] {
+        background: #eaeaea;
+        color: #a8a8a8;
       }
       paper-tabs {
         background: #eee;
@@ -54,6 +52,9 @@
       }
       #downloadbutton {
         margin-top: 15px;
+      }
+      core-icon {
+        margin-right: 10px;
       }
     </style>
 
@@ -74,13 +75,16 @@
                       hidden?="{{selected != 'paper'}}"></paper-checkbox>
     </p>
 
-    <ul>
+    <ul on-change="{{onCheckToggle}}">
       <template repeat="{{s,i in viewList}}">
         <li><paper-checkbox label="{{s.name}}" checked="{{s.checked}}"></paper-checkbox></li>
       </template>
     </ul>
-    <paper-button id="downloadbutton" label="{{downloadLabel}}" icon="archive"
-                  raisedButton on-tap="{{download}}" disabled?="{{disableDownload}}"></paper-button>
+    <paper-button id="downloadbutton"
+                  raised on-tap="{{download}}"
+                  disabled?="{{disableDownload}}">
+      <core-icon icon="archive"></core-icon>{{downloadLabel}}
+    </paper-button>
   </template>
   <script>
   (function() {
@@ -96,13 +100,13 @@
       return name + '=' + org + '/' + name;
     }
 
-    Polymer('bower-zipper', {
+    Polymer({
       coreElements: [],
       paperElements: [],
       allCore: false,
       allPaper: false,
       org: 'Polymer',
-      disableDownload: false,
+      disableDownload: true,
       downloadLabel: 'Download',
       observe: {
         'allCore allPaper': 'selectAllInView'
@@ -123,8 +127,24 @@
       },
       selectAllInView: function() {
         this.viewList.forEach(function(s, i) {
-          s.checked = this.selected == 'core' ? this.allCore : this.allPaper; 
+          s.checked = this.selected == 'core' ? this.allCore : this.allPaper;
         }.bind(this));
+      },
+      onCheckToggle: function(e, detail, sender) {
+        for (var i = 0, c; c = this.coreList[i]; ++i) {
+          if (c.checked) {
+            this.disableDownload = false;
+            return;
+          }
+        }
+        for (var i = 0, c; c = this.paperList[i]; ++i) {
+          if (c.checked) {
+            this.disableDownload = false;
+            return;
+          }
+        }
+
+        this.disableDownload = true; // no checkboxes selected, disabled download.
       },
       download: function(e, detail, sender) {
         if (this.disableDownload) {

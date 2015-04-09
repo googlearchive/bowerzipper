@@ -1,12 +1,12 @@
 application: bowerarchiver
 module: zipper
-version: 20141116
+version: 20150409
 runtime: custom
 api_version: 1
 threadsafe: yes
 vm: true
 manual_scaling:
-  instances: 3
+  instances: 6
 #vm_settings:
 #  docker_bucket: vm-containers.bowerarchiver.appspot.com
 

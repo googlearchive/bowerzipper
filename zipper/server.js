@@ -22,7 +22,11 @@ var PORT = 8080;
 
 var app = express();
 app.listen(PORT);
-app.use(bodyParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
 app.use(function(req, res, next) { // Enable CORS non the endpoints.
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -73,10 +77,11 @@ function bowerInstall(pkgs, callback) {
 
   var intallList = '';
   for (var name in pkgs) {
-    intallList += ' ' + name + '=' + pkgs[name] + '#master';
+    intallList += ' ' + name + '=' + pkgs[name];// + '#master';
   }
 
   var cmd = path.join(__dirname, 'node_modules/bower/bin/bower --allow-root install' + intallList + ' --force-latest');
+  console.log(cmd)
   clog('\x1b[37;47m ' + cmd + ' ');
   clog('\x1b[34;47m ' + cmd + ' ');
   clog('\x1b[37;47m ' + cmd + ' ');
@@ -98,7 +103,7 @@ function archive(res, componentPath, callback) {
   clog('\x1b[34;47m ' + cmd + ' ');
   clog('\x1b[37;47m ' + cmd + ' ');
   clog('');
-  
+
   var archive = archiver('zip');
 
   archive.on('end', function () {
@@ -121,6 +126,7 @@ function archive(res, componentPath, callback) {
 
 // GET /archive?name=pkg ==> install component, get zip
 // Example: /archive?core-ajax=Polymer/core-ajax
+//          /archive?core-ajax=Polymer/core-ajax%23^0.8-preview
 //          /archive?core-ajax=Polymer/core-ajax&core-tooltip=Polymer/core-tooltip
 app.get('/archive', function (req, res) {
   var pkgs = {};
@@ -131,13 +137,14 @@ app.get('/archive', function (req, res) {
   if (!Object.keys(pkgs).length) {
     res.write(
       'Examples:\n' +
-      '/archive?core-ajax=Polymer/core-ajax\n' +
-      '/archive?core-ajax=Polymer/core-ajax&google-sheets=GoogleWebComponents/google-sheets');
+      'Install the latest version: /archive?core-ajax=Polymer/core-ajax\n' +
+      'Install a particular version: /archive?core-ajax=Polymer/core-ajax%230.8\n' +
+      'Install multiple elements: /archive?core-ajax=Polymer/core-ajax&google-sheets=GoogleWebComponents/google-sheets');
     res.end();
     return;
   }
 
-  var source = req.headers.referer || req.host;
+  var source = req.headers.referer || req.hostname;
   insight.track('archive', source); // record `/archive/referrer` in Analytics.
 
   bowerInstall(pkgs, function(err, stdout, stderr, componentPath) {

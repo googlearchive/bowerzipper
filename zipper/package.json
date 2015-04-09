@@ -4,14 +4,14 @@
   "version": "0.0.1",
   "description": "A node-based tool that creates a .zip from a Bower command",
   "dependencies": {
-    "express": "4.0.0",
-    "archiver": "0.8.1",
-    "body-parser": "1.0.2",
-    "temp": "0.7.0",
-    "insight": "~0.3.1"
+    "express": "4.12.3",
+    "archiver": "0.14.3",
+    "body-parser": "1.12.2",
+    "temp": "0.8.1",
+    "insight": "~0.5.3"
   },
   "devDependencies": {
-    "bower": "~1.3.5"
+    "bower": "~1.4.1"
   },
   "repository": "",
   "author": "Eric Bidelman <ebidel@>, Johan Euphrosine <proppy@>",

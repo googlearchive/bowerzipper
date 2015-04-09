@@ -11,7 +11,7 @@
     "polymer",
     "web-components"
   ],
-  "license": "http://polymer.github.io/LICENSE.txt",
+  "license": "https://polymer.github.io/LICENSE.txt",
   "private": true,
   "ignore": [
     "**/.*",
@@ -21,8 +21,9 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#master",
-    "core-elements": "Polymer/core-elements#master",
-    "paper-elements": "Polymer/paper-elements#master"
+    "polymer": "Polymer/polymer#^0.5.5",
+    "core-elements": "Polymer/core-elements#^0.5.5",
+    "paper-elements": "Polymer/paper-elements#^0.5.5",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.6.0"
   }
 }
