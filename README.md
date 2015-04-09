@@ -17,8 +17,8 @@ The cloud console page is at [https://console.developers.google.com/project/apps
 
 3. Deploy the frontend and/or backend using:
 
-        gcloud app deploy frontend/
-        gcloud app deploy zipper/
+        gcloud preview app deploy frontend/ --project bowerarchiver
+        gcloud preview app deploy zipper/ --project bowerarchiver
         # gcloud --verbosity debug preview app deploy zipper/ --server preview.appengine.google.com
 
 ### Try it!
