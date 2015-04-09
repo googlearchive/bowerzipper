@@ -35,6 +35,10 @@ You should be able to hit the endpoint and download stuff. You can also pass par
 
     [http://bowerarchiver.appspot.com/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field](http://bowerarchiver.appspot.com/archive?core-ajax=Polymer/core-ajax&core-field=Polymer/core-field)
 
+- By default, the zipper tool will fetch the latest release of a component. You can specify a particular tag using: `<name>=<org>/<name>%23<VERSION>`:
+
+    [http://bowerarchiver.appspot.com/archive?core-ajax=Polymer/core-ajax%23^0.8](http://bowerarchiver.appspot.com/archive?core-ajax=Polymer/core-ajax%23^0.8-preview)
+    
 ## Run locally using Node
 
     git clone https://github.com/PolymerLabs/bowerzipper
