@@ -2,6 +2,7 @@
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/core-icons/core-icons.html">
 <link rel="import" href="../bower_components/font-roboto/roboto.html">
@@ -21,9 +22,6 @@
         padding: 10px 0;
         display: inline-block;
         min-width: 215px;
-      }
-      .all {
-        margin-bottom: 10px;
       }
       .all::shadow #checkboxLabel {
         font-weight: 500;
@@ -56,6 +54,13 @@
       core-icon {
         margin-right: 10px;
       }
+      #versionselector {
+        margin-right: 10px;
+        font-weight: 500;
+      }
+      #version {
+        font-weight: 300;
+      }
     </style>
 
     <div on-change="{{onCheckToggle}}">
@@ -70,11 +75,12 @@
         </paper-tabs>
       </div>
 
-      <p>
+      <p layout horizontal justified center>
         <paper-checkbox class="all" label="Toggle all" checked="{{allCore}}"
                         hidden?="{{selected != 'core'}}"></paper-checkbox>
         <paper-checkbox class="all" label="Toggle all" checked="{{allPaper}}"
                         hidden?="{{selected != 'paper'}}"></paper-checkbox>
+        <span id="versionselector">Download version: <paper-input id="version" value="latest"></paper-input></span>
       </p>
 
       <ul>
@@ -99,8 +105,12 @@
       window.URL.revokeObjectURL(a.href);
     }
 
-    function constructInstallCmd_(name, org) {
-      return name + '=' + org + '/' + name;
+    function constructInstallCmd_(name, org, version) {
+      var cmd = name + '=' + org + '/' + name;
+      if (version) {
+        cmd += '%23' + version;
+      }
+      return cmd;
     }
 
     Polymer({
@@ -162,13 +172,15 @@
         this.disableDownload = true;
         this.downloadLabel = 'Downloading...';
 
+        var version = this.$.version.value === 'latest' ? '' : this.$.version.value;
+
         this.installCmd = '';
         var installList = [];
         var pkgs = [];
 
         if (this.allCore) {
           // Shortcut all core elements.
-          pkgs.push(constructInstallCmd_('core-elements', this.org));
+          pkgs.push(constructInstallCmd_('core-elements', this.org, version));
         } else {
           // Create download list from selected core elements.
           installList = this.coreList.filter(function(s, i) {
@@ -178,7 +190,7 @@
 
         if (this.allPaper) {
           // Shortcut all paper elements.
-          pkgs.push(constructInstallCmd_('paper-elements', this.org));
+          pkgs.push(constructInstallCmd_('paper-elements', this.org, version));
         } else {
           // Create download list from selected paper elements.
           installList = installList.concat(this.paperList.filter(function(s, i) {
@@ -189,7 +201,7 @@
         // Individual packages.
         if (installList.length) {
           installList.forEach(function(s, i) {
-            pkgs.push(constructInstallCmd_(s.name, this.org));
+            pkgs.push(constructInstallCmd_(s.name, this.org, version));
           }.bind(this));
         }
 
@@ -199,6 +211,7 @@
           this.$.archiver.go();
         }
       },
+
       zipChanged: function() {
         invokeDownload_('components.zip', this.zip);
         this.disableDownload = false;
